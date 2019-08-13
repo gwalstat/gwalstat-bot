@@ -1,1 +1,3 @@
-# Github-Bot-webservice
+# Gwalstat
+
+🤖 A bot for checking pull requests spelling.

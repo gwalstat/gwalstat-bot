@@ -12,6 +12,7 @@ routes = web.RouteTableDef()
 
 router = routing.Router()
 
+
 @router.register("issues", action="opened")
 async def issue_opened_event(event, gh, *args, **kwargs):
     """
@@ -23,6 +24,7 @@ async def issue_opened_event(event, gh, *args, **kwargs):
     message = f"Thanks for the report @{author}! I will look into it ASAP! (I'm a bot)."
     await gh.post(url, data={"body": message})
 
+
 @router.register("pull_request", action="opened")
 async def pull_request_opened_event(event, gh, *args, **kwargs):
     """ Whenever a pull_request is opened, greet the author."""
@@ -30,11 +32,14 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     # reaction_url = f"{url}/reactions"
     author = event.data["pull_request"]["user"]["login"]
     diff_url = event.data["pull_request"]["diff_url"]
-    message = (f"🤖 Thanks for the pull_request @{author}!"
-               f"Your commit is on {diff_url}! "
-               "I will look into it ASAP! (I'm a bot, BTW 🤖).")
+    message = (
+        f"🤖 Thanks for the pull_request @{author}!"
+        f"Your commit is on {diff_url}! "
+        "I will look into it ASAP! (I'm a bot, BTW 🤖)."
+    )
     await gh.post(url, data={"body": message})
     await util.post_status(gh, event, util.status_check)
+
 
 @routes.post("/")
 async def main(request):
@@ -45,8 +50,7 @@ async def main(request):
 
     event = sansio.Event.from_http(request.headers, body, secret=secret)
     async with aiohttp.ClientSession() as session:
-        gh = gh_aiohttp.GitHubAPI(session, "krnick",
-                                  oauth_token=oauth_token)
+        gh = gh_aiohttp.GitHubAPI(session, "krnick", oauth_token=oauth_token)
         await router.dispatch(event, gh)
     return web.Response(status=200)
 
