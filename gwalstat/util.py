@@ -5,6 +5,14 @@ status_check = {
     "context": "JunWei-Bot/spcheck",
 }
 
+pending = {
+    "state": "pending",
+    "target_url": "https://example.com/build/status",
+    "description": "Waiting for the check!",
+    "context": "JunWei-Bot/spcheck",
+}
+
+
 
 async def post_status(gh, event, status):
     """Post a status in reaction to an event."""
