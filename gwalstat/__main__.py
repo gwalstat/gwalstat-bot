@@ -36,7 +36,7 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     author = event.data["pull_request"]["user"]["login"]
     diff_url = event.data["pull_request"]["diff_url"]
     pr_number = event.data["number"]
-    repository_name = event.data["name"]
+    repository_name = event.data["pull_request"]["head"]["repo"]["name"]
     full_url = "https://github.com/" + author + "/" + repository_name
     branch = event.data["pull_request"]["head"]["ref"]
     dirname = get_branch(full_url, branch)
