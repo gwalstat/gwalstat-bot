@@ -18,7 +18,11 @@ def spelling_check(content):
         for word in misspelled:
             # print("[TYPO Found] -> "+ word)
             error_list.append("[TYPO Found] -> " + word)
-    return error_list
+
+    if len(misspelled) == 0:
+        return None
+    else:
+        return error_list
 
 
 # print(spelling_check("this is a tast, which the tast would be failed"))

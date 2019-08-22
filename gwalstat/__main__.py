@@ -42,19 +42,34 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     dirname = get_branch(full_url, branch)
     f = open(dirname + "/README.md", "r")
 
-    wrong_word = "\n".join(spelling_check(f.read()))
+    result = spelling_check(f.read())
+    if result is not None:
+        wrong_word = "\n".join(result)
 
-    message = (
-        f"🤖 Thanks for the pull_request @{author}! <br>"
-        f"Your commit is on {diff_url} <br>"
-        f"Full Url: {full_url} <br>"
-        f"Pull Request number is : {pr_number} <br>"
-        f"TYPOS Found Below: <br>"
-        f"{wrong_word} <br><br>"
-        "I will look into it ASAP! (I'm a bot, BTW 🤖)."
-    )
-    await gh.post(url, data={"body": message})
-    await util.post_status(gh, event, util.status_check)
+        message = (
+            f"🤖 Thanks for the pull_request @{author}! <br>"
+            f"Your commit is on {diff_url} <br>"
+            f"Full Url: {full_url} <br>"
+            f"Pull Request number is : {pr_number} <br>"
+            f"TYPOS Found Below: <br><br>"
+            f"{wrong_word} <br><br>"
+            "I will look into it ASAP! (I'm a bot, BTW 🤖)."
+        )
+        await gh.post(url, data={"body": message})
+        await util.post_status(gh, event, util.failure)
+    else:
+
+        message = (
+            f"🤖 Thanks for the pull_request @{author}! <br>"
+            f"Your commit is on {diff_url} <br>"
+            f"Full Url: {full_url} <br>"
+            f"Pull Request number is : {pr_number} <br>"
+            f"There is no TYPO found <br><br>"
+            "I will look into it ASAP! (I'm a bot, BTW 🤖)."
+        )
+
+        await gh.post(url, data={"body": message})
+        await util.post_status(gh, event, util.success)
 
 
 @routes.post("/")
