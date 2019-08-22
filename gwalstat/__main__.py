@@ -33,12 +33,11 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     await util.post_status(gh, event, util.pending)
 
     url = event.data["pull_request"]["comments_url"]
-    # reaction_url = f"{url}/reactions"
     author = event.data["pull_request"]["user"]["login"]
     diff_url = event.data["pull_request"]["diff_url"]
-    number = event.data["number"]
-
-    full_url = "https://github.com/" + author + "/test-g"
+    pr_number = event.data["number"]
+    repository_name = event.data["name"]
+    full_url = "https://github.com/" + author + "/" + repository_name
     branch = event.data["pull_request"]["head"]["ref"]
     dirname = get_branch(full_url, branch)
     f = open(dirname + "/README.md", "r")
@@ -48,10 +47,10 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     message = (
         f"🤖 Thanks for the pull_request @{author}! <br>"
         f"Your commit is on {diff_url} <br>"
-        f"full url: {full_url} <br>"
-        f"Pull Request number is : {number}! <br>"
-        f"TYPO with Change:<br>"
-        f"{wrong_word} <br>"
+        f"Full Url: {full_url} <br>"
+        f"Pull Request number is : {pr_number} <br>"
+        f"TYPOS Found Below: <br>"
+        f"{wrong_word} <br><br>"
         "I will look into it ASAP! (I'm a bot, BTW 🤖)."
     )
     await gh.post(url, data={"body": message})
