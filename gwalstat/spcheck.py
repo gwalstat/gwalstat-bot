@@ -19,10 +19,9 @@ def spelling_check(content):
             # print("[TYPO Found] -> "+ word)
             error_list.append("[TYPO Found] -> " + word)
 
-    if len(misspelled) == 0:
-        return None
-    else:
         return error_list
+    else:
+        return None
 
 
 # print(spelling_check("this is a tast, which the tast would be failed"))
