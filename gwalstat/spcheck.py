@@ -18,4 +18,4 @@ def spelling_check(content):
             error_list.append("[TYPO Found] -> "+ word)
     return error_list
 
-print(spelling_check("this is a hello woald tast, which the tast would be failed"))
+#print(spelling_check("this is a hello woald tast, which the tast would be failed"))

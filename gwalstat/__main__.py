@@ -7,7 +7,7 @@ from gidgethub import aiohttp as gh_aiohttp
 
 from . import util
 from .git_util import get_branch
-
+from .spcheck import spelling_check
 
 routes = web.RouteTableDef()
 
@@ -41,13 +41,16 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     dirname = get_branch(full_url, "refs/pull/"+str(number)+"/merge")
     f = open(dirname+"/README.md","r")
 
+    wrong_word = "\n".join(spelling_check(f.read()))
+
 
     message = (
         f"🤖 Thanks for the pull_request @{author}! <br>"
         f"Your commit is on {diff_url} <br>"
         f"full url: {full_url} <br>"
         f"Pull Request number is : {number}! <br>"
-        f"Change content is: <br><br> {f.read()} <br><br>"
+        f"TYPO with Change:<br>"
+        f"{wrong_word} <br>"
         "I will look into it ASAP! (I'm a bot, BTW 🤖)."
     )
     await gh.post(url, data={"body": message})
