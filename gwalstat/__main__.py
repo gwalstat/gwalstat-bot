@@ -38,13 +38,12 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     diff_url = event.data["pull_request"]["diff_url"]
     number = event.data["number"]
 
-    full_url = "https://github.com/"+author+"/test-g"
+    full_url = "https://github.com/" + author + "/test-g"
     branch = event.data["pull_request"]["head"]["ref"]
     dirname = get_branch(full_url, branch)
-    f = open(dirname+"/README.md","r")
+    f = open(dirname + "/README.md", "r")
 
     wrong_word = "\n".join(spelling_check(f.read()))
-
 
     message = (
         f"🤖 Thanks for the pull_request @{author}! <br>"

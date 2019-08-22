@@ -13,7 +13,6 @@ pending = {
 }
 
 
-
 async def post_status(gh, event, status):
     """Post a status in reaction to an event."""
     await gh.post(event.data["pull_request"]["statuses_url"], data=status)
