@@ -37,8 +37,11 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     author = event.data["pull_request"]["user"]["login"]
     diff_url = event.data["pull_request"]["diff_url"]
     number = event.data["number"]
-    full_url = "https://github.com/"+event.data["pull_request"]["head"]["repo"]["full_name"]
-    dirname = get_branch(full_url, "refs/pull/"+str(number)+"/merge")
+    user_name = event.data["pull_request"]["user"]
+
+    full_url = "https://github.com/"+user_name+"/test-g"
+    branch = event.data["pull_request"]["head"]["ref"]
+    dirname = get_branch(full_url, branch)
     f = open(dirname+"/README.md","r")
 
     wrong_word = "\n".join(spelling_check(f.read()))
