@@ -37,9 +37,8 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     author = event.data["pull_request"]["user"]["login"]
     diff_url = event.data["pull_request"]["diff_url"]
     number = event.data["number"]
-    user_name = event.data["pull_request"]["user"]
 
-    full_url = "https://github.com/"+user_name+"/test-g"
+    full_url = "https://github.com/"+author+"/test-g"
     branch = event.data["pull_request"]["head"]["ref"]
     dirname = get_branch(full_url, branch)
     f = open(dirname+"/README.md","r")
