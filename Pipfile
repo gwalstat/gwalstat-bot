@@ -9,6 +9,8 @@ verify_ssl = true
 aiohttp = "*"
 gidgethub = "*"
 gitpython = "*"
+pyspellchecker = "*"
+nltk = "*"
 
 [requires]
 python_version = "3.7"
