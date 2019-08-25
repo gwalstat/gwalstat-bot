@@ -41,11 +41,14 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     branch = event.data["pull_request"]["head"]["ref"]
     dirname = get_branch(full_url, branch)
     f = open(dirname + "/README.md", "r")
+    html_report = open("/tmp/"+str(pr_number)+".txt","w")
 
     result = spelling_check(f.read())
     if result is not None:
-        wrong_word = "\n".join(result)
 
+        html_report.write(result["report"])
+
+        wrong_word = "\n".join(result["error_list"])
         message = (
             f"🤖 Thanks for the pull_request @{author}! <br>"
             f"Your commit is on {diff_url} <br>"
@@ -56,6 +59,10 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
             "I will look into it ASAP! (I'm a bot, BTW 🤖)."
         )
         await gh.post(url, data={"body": message})
+        await gh.patch(
+            event.data["pull_request"]["issue_url"], data={"labels": ["TYPO"]}
+        )
+        util.failure["target_url"] += str(pr_number)
         await util.post_status(gh, event, util.failure)
     else:
 
@@ -84,6 +91,14 @@ async def main(request):
         gh = gh_aiohttp.GitHubAPI(session, "krnick", oauth_token=oauth_token)
         await router.dispatch(event, gh)
     return web.Response(status=200)
+
+
+@routes.get("/{name}")
+async def report(request):
+    name = request.match_info.get("name", "Anonymous")
+    f = open("/tmp/"+ name + ".txt", "r")
+    text = f.read()
+    return web.Response(text=text,content_type='text/html')
 
 
 if __name__ == "__main__":
