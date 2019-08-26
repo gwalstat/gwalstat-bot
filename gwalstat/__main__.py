@@ -8,7 +8,7 @@ from gidgethub import aiohttp as gh_aiohttp
 from . import util
 from .git_util import get_branch
 from .spcheck import spelling_check
-
+from .file_ext import filepath
 routes = web.RouteTableDef()
 
 router = routing.Router()
@@ -40,6 +40,8 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     full_url = "https://github.com/" + author + "/" + repository_name
     branch = event.data["pull_request"]["head"]["ref"]
     dirname = get_branch(full_url, branch)
+    file_path = filepath(dirname)
+    print(file_path)
     f = open(dirname + "/README.md", "r")
     html_report = open("/tmp/" + str(pr_number) + ".txt", "w")
 
