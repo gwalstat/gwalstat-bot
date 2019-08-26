@@ -41,7 +41,7 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     branch = event.data["pull_request"]["head"]["ref"]
     dirname = get_branch(full_url, branch)
     f = open(dirname + "/README.md", "r")
-    html_report = open("/tmp/"+str(pr_number)+".txt","w")
+    html_report = open("/tmp/" + str(pr_number) + ".txt", "w")
 
     result = spelling_check(f.read())
     if result is not None:
@@ -96,9 +96,9 @@ async def main(request):
 @routes.get("/{name}")
 async def report(request):
     name = request.match_info.get("name", "Anonymous")
-    f = open("/tmp/"+ name + ".txt", "r")
+    f = open("/tmp/" + name + ".txt", "r")
     text = f.read()
-    return web.Response(text=text,content_type='text/html')
+    return web.Response(text=text, content_type="text/html")
 
 
 if __name__ == "__main__":

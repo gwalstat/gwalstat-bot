@@ -3,6 +3,7 @@ import nltk
 
 nltk.download("punkt")
 
+
 def spelling_check(content):
 
     spell = SpellChecker()
@@ -16,9 +17,8 @@ def spelling_check(content):
     error_list = []
 
     if len(misspelled) > 0:
-  
-        html_report += "<style> u {text-decoration: #f00 wavy underline;}</style>"
 
+        html_report += "<style> u {text-decoration: #f00 wavy underline;}</style>"
 
         for word in misspelled:
             # print("[TYPO Found] -> "+ word)
@@ -34,4 +34,4 @@ def spelling_check(content):
         return None
 
 
-#print(spelling_check("this is a tast, which the tast would be failed"))
+# print(spelling_check("this is a tast, which the tast would be failed"))
