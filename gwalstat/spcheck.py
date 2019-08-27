@@ -18,7 +18,11 @@ def spelling_check(content):
 
     if len(misspelled) > 0:
 
-        html_report += "<style> u {text-decoration: #f00 wavy underline;}</style>"
+        html_report += """
+        <style>
+        u {text-decoration: #f00 wavy underline;}
+        </style>
+        """
 
         for word in misspelled:
             # print("[TYPO Found] -> "+ word)

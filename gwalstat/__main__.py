@@ -9,6 +9,7 @@ from . import util
 from .git_util import get_branch
 from .spcheck import spelling_check
 from .file_ext import filepath
+
 routes = web.RouteTableDef()
 
 router = routing.Router()
