@@ -46,6 +46,10 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     f = open(dirname + "/README.md", "r")
     html_report = open("/tmp/" + str(pr_number) + ".txt", "w")
 
+    changed_file = []
+    for f in file_path:
+        changed_file.append(dirname + "/" + f)
+
     result = spelling_check(f.read())
     if result is not None:
 
@@ -56,6 +60,7 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
             f"🤖 Thanks for the pull_request @{author}! <br>"
             f"Your commit is on {diff_url} <br>"
             f"Full Url: {full_url +'/tree/'+ branch} <br>"
+            f"changed files : {changed_file}"
             f"Pull Request number is : {pr_number} <br>"
             f"TYPOS Found Below: <br><br>"
             f"{wrong_word} <br><br>"
