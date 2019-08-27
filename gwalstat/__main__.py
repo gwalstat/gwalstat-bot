@@ -68,7 +68,16 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
         )
         await gh.post(url, data={"body": message})
         await gh.patch(
-            event.data["pull_request"]["issue_url"], data={"labels": ["TYPO"]}
+            event.data["pull_request"]["issue_url"],
+            data={
+                "labels": [
+                    {
+                        "name": "TYPO",
+                        "description": "TYPOS Found in your pull request",
+                        "color": "d73a4a",
+                    }
+                ]
+            },
         )
         util.failure["target_url"] += str(pr_number)
         await util.post_status(gh, event, util.failure)
