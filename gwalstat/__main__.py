@@ -8,7 +8,6 @@ from gidgethub import aiohttp as gh_aiohttp
 from . import util
 from .git_util import get_branch
 from .spcheck import spelling_check
-from .file_ext import filepath
 
 routes = web.RouteTableDef()
 
@@ -40,28 +39,32 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     repository_name = event.data["pull_request"]["head"]["repo"]["name"]
     full_url = "https://github.com/" + author + "/" + repository_name
     branch = event.data["pull_request"]["head"]["ref"]
-    dirname = get_branch(full_url, branch)
-    file_path = filepath(dirname)
-    print(file_path)
-    f = open(dirname + "/README.md", "r")
 
-    html_report = open("/tmp/" + str(pr_number) + ".txt", "w")
+    # get modified file name and file path.
+    head_commit = get_branch(full_url, branch)
+
+    # f = open(dirname + "/README.md", "r")
+
+    # html_report = open("/tmp/" + str(pr_number) + ".txt", "w")
 
     changed_file = []
-    for diff_file in file_path:
+    for diff_file in head_commit["filename"]:
         changed_file.append(diff_file)
 
-    result = spelling_check(f.read())
+    # result = spelling_check(f.read())
+    result = "test-for-error"
     if result is not None:
 
-        html_report.write(result["report"])
+        # html_report.write(result)
 
-        wrong_word = "\n".join(result["error_list"])
+        # wrong_word = "\n".join(result["error_list"])
+        wrong_word = "test-for-error"
         message = (
             f"🤖 Thanks for the pull_request @{author}! <br>"
             f"Your commit is on {diff_url} <br>"
             f"Full Url: {full_url +'/tree/'+ branch} <br>"
             f"Pull Request number is : {pr_number} <br>"
+            f"Changed file : {changed_file} <br><br>"
             f"TYPOS Found Below: <br><br>"
             f"{wrong_word} <br><br>"
             "I will look into it ASAP! (I'm a bot, BTW 🤖)."
