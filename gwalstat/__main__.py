@@ -47,10 +47,6 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
 
     # html_report = open("/tmp/" + str(pr_number) + ".txt", "w")
 
-    changed_file = []
-    for diff_file in head_commit["filename"]:
-        changed_file.append(diff_file)
-
     # result = spelling_check(f.read())
     result = "test-for-error"
     if result is not None:
@@ -64,7 +60,7 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
             f"Your commit is on {diff_url} <br>"
             f"Full Url: {full_url +'/tree/'+ branch} <br>"
             f"Pull Request number is : {pr_number} <br>"
-            f"Changed file : {changed_file} <br><br>"
+            f"Changed file : <br>{head_commit['filename']} <br><br>"
             f"TYPOS Found Below: <br><br>"
             f"{wrong_word} <br><br>"
             "I will look into it ASAP! (I'm a bot, BTW 🤖)."
