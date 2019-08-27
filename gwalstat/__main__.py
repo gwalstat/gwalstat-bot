@@ -44,11 +44,12 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     file_path = filepath(dirname)
     print(file_path)
     f = open(dirname + "/README.md", "r")
+
     html_report = open("/tmp/" + str(pr_number) + ".txt", "w")
 
     changed_file = []
-    for f in file_path:
-        changed_file.append(dirname + "/" + f)
+    for diff_file in file_path:
+        changed_file.append(diff_file)
 
     result = spelling_check(f.read())
     if result is not None:
@@ -60,7 +61,6 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
             f"🤖 Thanks for the pull_request @{author}! <br>"
             f"Your commit is on {diff_url} <br>"
             f"Full Url: {full_url +'/tree/'+ branch} <br>"
-            f"changed files : {changed_file}"
             f"Pull Request number is : {pr_number} <br>"
             f"TYPOS Found Below: <br><br>"
             f"{wrong_word} <br><br>"
@@ -99,6 +99,12 @@ async def main(request):
         gh = gh_aiohttp.GitHubAPI(session, "krnick", oauth_token=oauth_token)
         await router.dispatch(event, gh)
     return web.Response(status=200)
+
+
+@router.register("push")
+async def push_event(event, gh, *args, **kwargs):
+    print("added:" + str(event.data["commits"][0]["added"]))
+    print("modified" + str(event.data["commits"][0]["modified"]))
 
 
 @routes.get("/{name}")
