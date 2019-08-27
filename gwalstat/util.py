@@ -15,7 +15,7 @@ pending = {
 failure = {
     "state": "failure",
     "target_url": "https://gwalstat.herokuapp.com/",
-    "description": "TYPOS in your Pull Request found!",
+    "description": "TYPOS found in your Pull Request !",
     "context": "Gwalstat/spcheck",
 }
 
