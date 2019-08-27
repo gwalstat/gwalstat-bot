@@ -19,6 +19,14 @@ failure = {
     "context": "Gwalstat/spcheck",
 }
 
+typo_label = [
+    {
+        "name": "TYPO",
+        "description": "TYPOS Found in your pull request",
+        "color": "d73a4a",
+    }
+]
+
 
 async def post_status(gh, event, status):
     """Post a status in reaction to an event."""
