@@ -26,7 +26,7 @@
 [Example](https://github.com/krnick/Gwalstat-test/pull/1)
 
 
-* **Label from Bot**
+* **Labeled from Bot**
 
 ![](https://i.imgur.com/pcnZ6Ah.png)
 
@@ -34,7 +34,7 @@
 
 ![](https://i.imgur.com/SPFIJia.png)
 
-* **Label from Bot**
+* **Status check from Bot**
 
 ![](https://i.imgur.com/omhLmPy.png)
 
