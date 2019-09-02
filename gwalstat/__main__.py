@@ -64,7 +64,8 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
         )
         await gh.post(url, data={"body": message})
         await gh.patch(label_url, data={"labels": util.typo_label})
-        util.failure["target_url"] += str(pr_number)
+        details_url = "https://gwalstat.herokuapp.com/" + str(pr_number)
+        util.failure["target_url"] = details_url
         await util.post_status(gh, event, util.failure)
     else:
 
