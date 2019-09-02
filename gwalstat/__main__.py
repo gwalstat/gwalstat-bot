@@ -6,8 +6,8 @@ from gidgethub import routing, sansio
 from gidgethub import aiohttp as gh_aiohttp
 
 from . import util
-from .git_util import get_branch
-from .spcheck import spelling_check, gen_report
+from .git_util import GitUtil
+from .spcheck import SpCheck
 
 routes = web.RouteTableDef()
 
@@ -41,10 +41,12 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
     repository_name = event.data["pull_request"]["head"]["repo"]["name"]
     full_url = "https://github.com/" + author + "/" + repository_name
     branch = event.data["pull_request"]["head"]["ref"]
+    git_util = GitUtil()
+    spcheck = SpCheck()
 
     # get modified file name and file path.
-    head_commit = get_branch(full_url, branch)
-    output = gen_report(head_commit["filepath"], head_commit["filename"])
+    head_commit = git_util.get_branch(full_url, branch)
+    output = spcheck.gen_report(head_commit["filepath"], head_commit["filename"])
 
     if output is not None:
         html_report = open("/tmp/" + str(pr_number) + ".txt", "w")
