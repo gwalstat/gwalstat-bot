@@ -1,9 +1,9 @@
 import os
-import aiohttp
 
+import aiohttp
 from aiohttp import web
-from gidgethub import routing, sansio
 from gidgethub import aiohttp as gh_aiohttp
+from gidgethub import routing, sansio
 
 from . import util
 from .git_util import GitUtil
@@ -55,7 +55,7 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
         message = (
             f"🤖 Thanks for the pull_request @{author}! <br>"
             f"Your commit is on {diff_url} <br>"
-            f"Full Url: {full_url +'/tree/'+ branch} <br>"
+            f"Full Url: {full_url + '/tree/' + branch} <br>"
             f"Pull Request number is : {pr_number} <br>"
             f"Changed file : <br>{head_commit['filename']} <br><br>"
             f"TYPOS Found Below: <br><br>"
