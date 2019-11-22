@@ -1,6 +1,6 @@
-import git
 import tempfile
-import shutil
+
+import git
 
 FILE_EXTENSION_CHECK = ("md", "rst")
 
@@ -8,7 +8,7 @@ FILE_EXTENSION_CHECK = ("md", "rst")
 class GitUtil:
     def get_branch(self, url, br):
 
-        dirpath = tempfile.mkdtemp()
+        dir_path = tempfile.mkdtemp()
         git_command = git.cmd.Git()
         matching = []
         changed_files_name = []
@@ -26,7 +26,7 @@ class GitUtil:
 
         print("Start to fetching")
 
-        repo = git.Repo.clone_from(url=url, to_path=dirpath, branch=br)
+        repo = git.Repo.clone_from(url=url, to_path=dir_path, branch=br)
 
         # Find changed files and path.
         for diff_item in repo.head.commit.diff("HEAD~1"):
@@ -35,9 +35,8 @@ class GitUtil:
 
         # Return the dict of file path and file name which was changed.
         result["filename"] = changed_files_name
-        result["filepath"] = dirpath
+        result["filepath"] = dir_path
         return result
-
 
 # user = "krnick"
 # br = "krnick-patch-3"
