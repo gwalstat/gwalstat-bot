@@ -46,27 +46,43 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
 
     # get modified file name and file path.
     head_commit = git_util.get_branch(full_url, branch)
-    output = spcheck.gen_report(head_commit["filepath"], head_commit["filename"])
 
-    if output is not None:
-        html_report = open("/tmp/" + str(pr_number) + ".txt", "w")
-        html_report.write(output["html_report"])
+    if len(head_commit["filename"]) > 0 :
+        output = spcheck.gen_report(head_commit["filepath"], head_commit["filename"])
 
-        message = (
-            f"🤖 Thanks for the pull_request @{author}! <br>"
-            f"Your commit is on {diff_url} <br>"
-            f"Full Url: {full_url + '/tree/' + branch} <br>"
-            f"Pull Request number is : {pr_number} <br>"
-            f"Changed file : <br>{head_commit['filename']} <br><br>"
-            f"TYPOS Found Below: <br><br>"
-            f"{output['comment_report']} <br><br>"
-            "I will look into it ASAP! (I'm a bot, BTW 🤖)."
-        )
-        await gh.post(url, data={"body": message})
-        await gh.patch(label_url, data={"labels": util.typo_label})
-        details_url = "https://gwalstat.herokuapp.com/" + str(pr_number)
-        util.failure["target_url"] = details_url
-        await util.post_status(gh, event, util.failure)
+        if output is not None:
+            html_report = open("/tmp/" + str(pr_number) + ".txt", "w")
+            html_report.write(output["html_report"])
+
+            message = (
+                f"🤖 Thanks for the pull_request @{author}! <br>"
+                f"Your commit is on {diff_url} <br>"
+                f"Full Url: {full_url + '/tree/' + branch} <br>"
+                f"Pull Request number is : {pr_number} <br>"
+                f"Changed file : <br>{head_commit['filename']} <br><br>"
+                f"TYPOS Found Below: <br><br>"
+                f"{output['comment_report']} <br><br>"
+                "I will look into it ASAP! (I'm a bot, BTW 🤖)."
+            )
+            await gh.post(url, data={"body": message})
+            await gh.patch(label_url, data={"labels": util.typo_label})
+            details_url = "https://gwalstat.herokuapp.com/" + str(pr_number)
+            util.failure["target_url"] = details_url
+            await util.post_status(gh, event, util.failure)
+
+        else:
+
+            message = (
+                f"🤖 Thanks for the pull_request @{author}! <br>"
+                f"Your commit is on {diff_url} <br>"
+                f"Full Url: {full_url} <br>"
+                f"Pull Request number is : {pr_number} <br>"
+                f"There is no TYPO found <br><br>"
+                "I will look into it ASAP! (I'm a bot, BTW 🤖)."
+            )
+
+            await gh.post(url, data={"body": message})
+            await util.post_status(gh, event, util.success)
     else:
 
         message = (
@@ -77,7 +93,6 @@ async def pull_request_opened_event(event, gh, *args, **kwargs):
             f"There is no TYPO found <br><br>"
             "I will look into it ASAP! (I'm a bot, BTW 🤖)."
         )
-
         await gh.post(url, data={"body": message})
         await util.post_status(gh, event, util.success)
 
